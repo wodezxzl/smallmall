@@ -84,6 +84,7 @@
         isShowGoTop: false,
         tabControlOffSetTop: 0,
         isTabControlStop: false,
+        saveY: 0,
       }
     },
     methods: {
@@ -105,6 +106,7 @@
         }
         // 实现两个tabControl的同步
         this.$refs.replaceTabControl.currentIndex = index
+        this.$refs.cTabControl.currentIndex = index
       },
       // 2.回到顶部
       goTop() {
@@ -145,8 +147,8 @@
           // 加载完该页后应该将对应的page页码增加,以对应当前数据页码
           this.goods[type].page++
           // 每加载完毕一页数据就执行finishPullUp,表示可以执行下一次上拉加载更多
-          //TODO 这里是有BUG的如果图片来的太快可能拿不到this.$refs.cScroll
-          this.$refs.cScroll.finishPullUp()
+          //这里是有BUG的如果图片来的太快可能拿不到this.$refs.cScroll,使用一个延时操作来刷新上拉加载事件
+          setTimeout(this.$refs.cScroll.finishPullUp(), 500)
         })
       },
     },
@@ -165,6 +167,13 @@
       this.$bus.$on('itemImageLoad', () => {
         refresh()
       })
+    },
+    activated() {
+      this.$refs.cScroll.scrollTo(0, this.save, 0)
+      this.$refs.cScroll.refresh()
+    },
+    deactivated() {
+      this.saveY = this.$refs.cScroll.getScrollY()
     },
   }
 </script>
