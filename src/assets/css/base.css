@@ -1,14 +1,16 @@
 @import "./normalize.css";
 
 :root {
-  --color-text: #666666;
+  --color-text: #1f1f1f;
   --color-high-text: #ff5777;
   --color-tint: #ff8198;
   --color-background: #fff;
   --font-size: 14px;
   --line-height: 1.5;
 }
-
+li {
+  list-style: none;
+}
 *,
 *::before,
 *::after {

@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper">
-    分类
   </div>
 </template>
 

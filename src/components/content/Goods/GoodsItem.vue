@@ -1,9 +1,9 @@
 <template>
   <div class="goods-item" @click="itemClick">
-    <img :src="item.show.img" alt="" @load="imgLoad" />
+    <img :src="url" alt="" @load="imgLoad" />
     <span class="description">{{ item.title }}}</span>
     <div>
-      <span>{{ item.orgPrice }}</span>
+      <span>{{ price }}</span>
       <span></span>
       <span>{{ item.cfav }}</span>
     </div>
@@ -19,6 +19,18 @@
         default() {
           return {}
         },
+      },
+    },
+    computed: {
+      url() {
+        if (this.item.show) {
+          return this.item.show.img
+        } else {
+          return this.item.image
+        }
+      },
+      price() {
+        return this.item.orgPrice || this.item.price
       },
     },
     methods: {
