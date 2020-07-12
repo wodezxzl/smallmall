@@ -18,6 +18,10 @@
         type: Number,
         default: 1,
       },
+      pullUpLoad: {
+        type: Boolean,
+        default: true,
+      },
     },
     data() {
       return {
@@ -27,7 +31,7 @@
     mounted() {
       this.scroll = new BScroll('.wrapper', {
         probeType: this.probeType,
-        pullUpLoad: true,
+        pullUpLoad: this.pullUpLoad,
         click: true,
       })
       if (this.probeType === 2 || this.probeType === 3) {

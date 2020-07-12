@@ -148,7 +148,7 @@
           this.goods[type].page++
           // 每加载完毕一页数据就执行finishPullUp,表示可以执行下一次上拉加载更多
           //这里是有BUG的如果图片来的太快可能拿不到this.$refs.cScroll,使用一个延时操作来刷新上拉加载事件
-          setTimeout(this.$refs.cScroll.finishPullUp(), 500)
+          setTimeout(this.$refs.cScroll.finishPullUp(), 200)
         })
       },
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-item">
+  <div class="goods-item" @click="itemClick">
     <img :src="item.show.img" alt="" @load="imgLoad" />
     <span class="description">{{ item.title }}}</span>
     <div>
@@ -25,6 +25,10 @@
       imgLoad() {
         // 事件总线,发射事件后如何组件都能监听到
         this.$bus.$emit('itemImageLoad')
+      },
+      // 每一个商品点击后跳转到详情页根据传递过去的id决定显示什么页面
+      itemClick() {
+        this.$router.push('/detail/' + this.item.iid)
       },
     },
   }
