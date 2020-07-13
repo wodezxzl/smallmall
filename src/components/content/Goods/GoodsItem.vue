@@ -23,11 +23,7 @@
     },
     computed: {
       url() {
-        if (this.item.show) {
-          return this.item.show.img
-        } else {
-          return this.item.image
-        }
+        return this.item.image || this.item.show.img
       },
       price() {
         return this.item.orgPrice || this.item.price
@@ -40,7 +36,7 @@
       },
       // 每一个商品点击后跳转到详情页根据传递过去的id决定显示什么页面
       itemClick() {
-        this.$router.push('/detail/' + this.item.iid)
+        this.$router.push('/detail/' + (this.item.iid || this.item.shop_id))
       },
     },
   }

@@ -12,7 +12,7 @@
         </div>
         <div class="content">{{ item.content }}</div>
         <div class="other-info">
-          <span class="time">{{ item.created }}</span>
+          <span class="time">{{ item.created | showData }}</span>
           <span class="style">{{ item.style }}</span>
         </div>
       </div>
@@ -21,6 +21,9 @@
 </template>
 
 <script>
+  // 事件戳格式化函数
+  import { formatDate } from '@/common/utils'
+
   export default {
     name: 'DetailComment',
     props: {
@@ -29,6 +32,14 @@
         default() {
           return []
         },
+      },
+    },
+    filters: {
+      showData(value) {
+        // 1.将时间戳转换为Data对象
+        const time = new Date(value * 1000)
+        // 2.使用转换函数
+        return formatDate(time, 'yyyy-MM-dd')
       },
     },
   }
@@ -65,6 +76,9 @@
       .other-info {
         margin-bottom: 40px;
         color: #ccc;
+        .time {
+          margin-right: 6px;
+        }
       }
     }
   }

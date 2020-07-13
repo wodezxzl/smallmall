@@ -36,6 +36,8 @@
     methods: {
       navBarClick(index) {
         this.currentType = index
+        // 给父组件发射点击事件
+        this.$emit('titleClick', index)
       },
       backClick() {
         // 点击路由返回

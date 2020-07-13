@@ -45,7 +45,6 @@
   import TabControl from '@/components/content/TabControl'
   import GoodLists from '@/components/content/Goods/GoodsLists'
   import Scroll from '@/components/common/scroll/Scroll'
-  import GoTop from '@/components/content/GoTop'
 
   // 子组件
   import HomeSwiper from './childComps/HomeSwiper'
@@ -56,7 +55,8 @@
   import { getHomeMultidata, getHomeGoods } from 'network/home'
 
   // 公共方法
-  import { debounce } from '@/common/utils'
+  // 混入: 1.处理图片加载成功刷新滚动高度函数  2:回到顶部
+  import { imgListenerMixin, backTopMixin } from '@/common/mixin'
 
   export default {
     name: 'Home',
@@ -68,8 +68,8 @@
       TabControl,
       GoodLists,
       Scroll,
-      GoTop,
     },
+    mixins: [imgListenerMixin, backTopMixin],
     data() {
       return {
         banners: null,
@@ -81,10 +81,11 @@
           sell: { page: 0, list: [] },
         },
         currentType: 'pop',
-        isShowGoTop: false,
-        tabControlOffSetTop: 0,
         isTabControlStop: false,
+        tabControlOffSetTop: 0,
         saveY: 0,
+        // 图片加载完成处理函数
+        imageLoadListener: null,
       }
     },
     methods: {
@@ -108,21 +109,17 @@
         this.$refs.replaceTabControl.currentIndex = index
         this.$refs.cTabControl.currentIndex = index
       },
-      // 2.回到顶部
-      goTop() {
-        this.$refs.cScroll.scrollTo(0, 0, 500)
-      },
-      // 3.根据scroll组件传递过来的页面滚动距离决定是否显示回到顶部和是否tabControl吸顶
+      // 2.根据scroll组件传递过来的页面滚动距离决定是否显示回到顶部和是否tabControl吸顶
       scroll(position) {
         this.isShowGoTop = -position.y > 1000
         this.isTabControlStop = -position.y > this.tabControlOffSetTop
       },
-      // 4.上拉加载更多
+      // 3.上拉加载更多
       getMoreGoods() {
         // currentType记录着当前在哪一个tab-control
         this.getHomeGoods(this.currentType)
       },
-      // 5.轮播图加载完毕拿到tabControl的offsetTop
+      // 4.轮播图加载完毕拿到tabControl的offsetTop
       swiperImgLoad() {
         this.tabControlOffSetTop = this.$refs.cTabControl.$el.offsetTop
       },
@@ -132,24 +129,34 @@
        */
       // 1.请求轮播图和推荐数据
       getHomeMultidata() {
-        getHomeMultidata().then(res => {
-          this.banners = res.data.banner.list
-          this.recommends = res.data.recommend.list
-        })
+        getHomeMultidata().then(
+          res => {
+            this.banners = res.data.banner.list
+            this.recommends = res.data.recommend.list
+          },
+          error => {
+            console.log(error)
+          },
+        )
       },
       // 2.请求商品数据
       getHomeGoods(type) {
         // 每次调用加载下一页数据
         let page = this.goods[type].page + 1
-        getHomeGoods(type, page).then(res => {
-          // 直接使用数组的展开将数据依次放入对应type的list数组里面
-          this.goods[type].list.push(...res.data.list)
-          // 加载完该页后应该将对应的page页码增加,以对应当前数据页码
-          this.goods[type].page++
-          // 每加载完毕一页数据就执行finishPullUp,表示可以执行下一次上拉加载更多
-          //这里是有BUG的如果图片来的太快可能拿不到this.$refs.cScroll,使用一个延时操作来刷新上拉加载事件
-          setTimeout(this.$refs.cScroll.finishPullUp(), 200)
-        })
+        getHomeGoods(type, page).then(
+          res => {
+            // 直接使用数组的展开将数据依次放入对应type的list数组里面
+            this.goods[type].list.push(...res.data.list)
+            // 加载完该页后应该将对应的page页码增加,以对应当前数据页码
+            this.goods[type].page++
+            // 每加载完毕一页数据就执行finishPullUp,表示可以执行下一次上拉加载更多
+            //这里是有BUG的如果图片来的太快可能拿不到this.$refs.cScroll,使用一个延时操作来刷新上拉加载事件
+            setTimeout(this.$refs.cScroll.finishPullUp(), 200)
+          },
+          error => {
+            console.log(error)
+          },
+        )
       },
     },
     created() {
@@ -159,21 +166,15 @@
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
     },
-    mounted() {
-      // 在mounted中才能拿到this.$refs.cScroll
-      // 使用一个防抖函数
-      const refresh = debounce(this.$refs.cScroll.refresh, 500)
-      // 请求图片后就监听图片是否加载完毕,每个图片加载完毕就执行refresh
-      this.$bus.$on('itemImageLoad', () => {
-        refresh()
-      })
-    },
     activated() {
       this.$refs.cScroll.scrollTo(0, this.save, 0)
       this.$refs.cScroll.refresh()
     },
     deactivated() {
+      // 1.取得滚动的距离
       this.saveY = this.$refs.cScroll.getScrollY()
+      // 2.取消图片加载完毕后的刷新处理函数
+      this.$bus.$off('itemImageLoad', this.imageLoadListener)
     },
   }
 </script>
