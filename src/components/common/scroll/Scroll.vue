@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="default-wrapper">
     <div class="content">
       <slot></slot>
     </div>
@@ -29,7 +29,7 @@
       }
     },
     mounted() {
-      this.scroll = new BScroll('.wrapper', {
+      this.scroll = new BScroll('.default-wrapper', {
         probeType: this.probeType,
         pullUpLoad: this.pullUpLoad,
         click: true,

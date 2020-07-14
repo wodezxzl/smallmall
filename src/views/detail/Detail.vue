@@ -24,6 +24,7 @@
     </scroll>
     <detail-bottom-tool-bar @addCartClick="addCartClick" />
     <go-top v-show="isShowGoTop" @click.native="goTop" />
+    <toast class="detail-toast" message="添加购物车成功" ref="toast" />
   </div>
 </template>
 
@@ -38,6 +39,9 @@
   import DetailComment from './childComps/DetailComment'
   import DetailRecommend from './childComps/DetailRecommend'
   import DetailBottomToolBar from './childComps/DetailBottomToolBar'
+
+  // 公共组件
+  import Toast from '@/components/common/toast/Toast'
 
   // 滚动插件
   import Scroll from '@/components/common/scroll/Scroll'
@@ -55,7 +59,7 @@
   import { imgListenerMixin, backTopMixin } from '@/common/mixin'
 
   // 导入actions映射
-  // import { mapActions } from 'vuex'
+  import { mapActions } from 'vuex'
 
   export default {
     name: 'Detail',
@@ -70,6 +74,7 @@
       DetailComment,
       DetailRecommend,
       DetailBottomToolBar,
+      Toast,
     },
     mixins: [imgListenerMixin, backTopMixin],
     data() {
@@ -89,7 +94,7 @@
     },
     methods: {
       // actions映射
-      // ...mapActions([mapActions]),
+      ...mapActions(['addCart']),
 
       // 1.发送网络请求
       getDetail() {
@@ -189,11 +194,16 @@
         product.desv = this.goods.desc
         product.price = this.goods.nowPrice
         product.iid = this.iid
+        product.checked = true
         // 2.将商品添加到购物车
-        this.$store.dispatch('addCart', product).then(
+        this.addCart(product).then(
           // 在返回的promise里面操作
-          res => {
-            console.log(res)
+          () => {
+            // 先显示成功信息,一秒后消失
+            this.$refs.toast.isShow = true
+            setTimeout(() => {
+              this.$refs.toast.isShow = false
+            }, 500)
           },
           err => {
             console.log(err)
@@ -226,6 +236,13 @@
     }
     .goTop {
       z-index: 100;
+    }
+    .detail-toast {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 999;
     }
   }
 </style>

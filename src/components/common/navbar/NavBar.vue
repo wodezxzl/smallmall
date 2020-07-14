@@ -14,13 +14,14 @@
 
 <style scoped lang="less">
   .nav-bar {
+    position: relative;
     display: flex;
     height: 44px;
     line-height: 44px;
     font-size: 20px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     background-color: var(--color-tint);
-    z-index: 1;
+    z-index: 999;
     .left {
       width: 60px;
     }
