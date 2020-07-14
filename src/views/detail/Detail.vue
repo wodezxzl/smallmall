@@ -198,12 +198,9 @@
         // 2.将商品添加到购物车
         this.addCart(product).then(
           // 在返回的promise里面操作
-          () => {
+          res => {
             // 先显示成功信息,一秒后消失
-            this.$refs.toast.isShow = true
-            setTimeout(() => {
-              this.$refs.toast.isShow = false
-            }, 500)
+            this.$toast.show(res, 500)
           },
           err => {
             console.log(err)
@@ -236,13 +233,6 @@
     }
     .goTop {
       z-index: 100;
-    }
-    .detail-toast {
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 999;
     }
   }
 </style>

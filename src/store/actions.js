@@ -6,12 +6,11 @@ export const actions = {
       // 如果之前就有了这个对象,就将数量加一,否则添加到数组并且count设置为一
       if (oldProduct) {
         commit('addCount', oldProduct)
-        resolve(1)
       } else {
         payload.count = 1
         commit('addToCart', payload)
-        resolve(2)
       }
+      resolve('添加购物车成功')
     })
   },
 }
