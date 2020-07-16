@@ -15,7 +15,7 @@
         </tr>
       </table>
     </div>
-    <img v-if="paramInfo.img" :src="paramInfo.img" alt="" />
+    <img v-if="paramInfo.img" v-lazy="paramInfo.img" alt="" />
   </div>
 </template>
 

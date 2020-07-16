@@ -1,5 +1,5 @@
 <template>
-  <div class="default-wrapper">
+  <div ref="defaultWrapper">
     <div class="content">
       <slot></slot>
     </div>
@@ -29,7 +29,8 @@
       }
     },
     mounted() {
-      this.scroll = new BScroll('.default-wrapper', {
+      // 这里取初始化对象一定要用this.$refs(用类名它内部调用的是document.querySelector,只会找到第一个类)
+      this.scroll = new BScroll(this.$refs.defaultWrapper, {
         probeType: this.probeType,
         pullUpLoad: this.pullUpLoad,
         click: true,

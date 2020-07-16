@@ -15,6 +15,7 @@
     position: fixed;
     bottom: 10%;
     right: 0;
+    z-index: 9999;
     img {
       width: 68%;
     }

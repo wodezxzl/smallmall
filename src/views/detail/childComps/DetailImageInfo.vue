@@ -16,7 +16,7 @@
         v-for="(item, index) in detailImageInfo.detailImage[0].list"
         :key="index"
       >
-        <img :src="item" alt="" @load="imgLoad" />
+        <img v-lazy="item" alt="" @load="imgLoad" />
       </div>
     </div>
   </div>

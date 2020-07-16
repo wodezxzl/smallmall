@@ -42,7 +42,7 @@
     height: 40px;
     background-color: #fff;
     div {
-      flex: 1;
+      /*flex: 1;*/
       text-align: center;
       span {
         padding: 0 8px 8px;

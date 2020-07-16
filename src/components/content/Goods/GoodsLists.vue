@@ -33,5 +33,6 @@
     justify-content: space-evenly;
     flex-wrap: wrap;
     margin-top: 20px;
+    padding: 0 6px;
   }
 </style>

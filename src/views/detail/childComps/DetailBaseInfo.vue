@@ -21,7 +21,7 @@
         v-for="index in goods.services.length - 1"
         :key="index"
       >
-        <img :src="goods.services[index - 1].icon" alt="" />
+        <img v-lazy="goods.services[index - 1].icon" alt="" />
         <span>{{ goods.services[index - 1].name }}</span>
       </span>
     </div>

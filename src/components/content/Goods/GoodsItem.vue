@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemClick">
-    <img :src="url" alt="" @load="imgLoad" />
+    <img v-lazy="url" alt="" @load="imgLoad" />
     <span class="description">{{ item.title }}}</span>
     <div>
       <span>{{ price }}</span>
@@ -23,7 +23,7 @@
     },
     computed: {
       url() {
-        return this.item.image || this.item.show.img
+        return this.item.image || this.item.img || this.item.show.img
       },
       price() {
         return this.item.orgPrice || this.item.price
@@ -46,6 +46,7 @@
   .goods-item {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 48%;
     img {
       width: 100%;

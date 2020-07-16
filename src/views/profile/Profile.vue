@@ -1,11 +1,19 @@
 <template>
-  <h2>我的</h2>
+  <div class="profile">
+    <profile-login />
+  </div>
 </template>
 
 <script>
+  // 导入子组件
+  import ProfileLogin from './childComps/ProfileLogin'
+
   export default {
-    name: 'Peofile',
-}
+    name: 'Profile',
+    components: {
+      ProfileLogin,
+    },
+  }
 </script>
 
 <style scoped lang="less"></style>

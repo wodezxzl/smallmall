@@ -8,7 +8,7 @@
         @click.native="item.checked = !item.checked"
       />
     </div>
-    <div class="cart-goods-image"><img :src="item.image" alt="" /></div>
+    <div class="cart-goods-image"><img v-lazy="item.image" alt="" /></div>
     <div class="describe-info">
       <div>
         <span class="title">{{ item.title }}</span>

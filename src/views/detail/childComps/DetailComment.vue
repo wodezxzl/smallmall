@@ -7,7 +7,7 @@
     <div class="comments">
       <div v-for="item in comment" :key="item.content">
         <div class="user">
-          <img :src="item.user.avatar" alt="" />
+          <img v-lazy="item.user.avatar" alt="" />
           <span>{{ item.user.uname }}</span>
         </div>
         <div class="content">{{ item.content }}</div>
